@@ -1,0 +1,54 @@
+{
+  "name": "apple-device-qa",
+  "version": "0.1.0",
+  "description": "Drive Apple Watch and iPhone/iPad (physical or simulator) from the command line or an AI agent: tap, swipe, type, Digital Crown, screenshots and accessibility tree via an XCUITest runner.",
+  "type": "module",
+  "bin": {
+    "apple-device-qa": "bin/watchqa.js",
+    "apple-device-qa-mcp": "bin/watchqa-mcp.js",
+    "watchqa": "bin/watchqa.js",
+    "watchqa-mcp": "bin/watchqa-mcp.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "runner",
+    "skills",
+    "PROTOCOL.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "e2e:sim": "node test/e2e.js --simulator",
+    "e2e:device": "node test/e2e.js",
+    "e2e:ios-sim": "node test/e2e.js --platform ios --simulator",
+    "e2e:ios-device": "node test/e2e.js --platform ios"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "os": [
+    "darwin"
+  ],
+  "keywords": [
+    "apple-watch",
+    "ios",
+    "iphone",
+    "watchos",
+    "xcuitest",
+    "mcp",
+    "qa",
+    "automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BossOptional/apple-device-qa.git"
+  },
+  "homepage": "https://github.com/BossOptional/apple-device-qa#readme",
+  "bugs": {
+    "url": "https://github.com/BossOptional/apple-device-qa/issues"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^4.6.7"
+  }
+}

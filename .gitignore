@@ -1,0 +1,6 @@
+node_modules/
+watchqa-out/
+.DS_Store
+*.xcresult
+runner/WatchQA.xcodeproj/xcuserdata/
+runner/WatchQA.xcodeproj/project.xcworkspace/xcuserdata/
