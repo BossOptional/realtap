@@ -84,6 +84,8 @@ Full command list: `realtap --help`. Wire format: [PROTOCOL.md](PROTOCOL.md).
 
 Claude Code: `claude mcp add realtap -- npx -y --package=realtap realtap-mcp`.
 
+As a Claude Code plugin (skills + MCP server together; run `npm install` in the checkout first): `claude --plugin-dir /path/to/realtap`.
+
 Tools: `device_list`, `device_start`, `device_status`, `device_stop`,
 `device_launch`, `device_activate`, `device_terminate`, `device_tap` (tap / doubleTap /
 longPress), `device_swipe`, `device_home`, `device_wait_for`, `device_find`,

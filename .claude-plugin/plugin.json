@@ -1,0 +1,7 @@
+{
+  "name": "realtap",
+  "version": "0.1.0",
+  "description": "Drive Apple Watch and iPhone/iPad (physical or simulator) from an AI agent: skills for driving, setup and verification, plus the realtap MCP server.",
+  "repository": "https://github.com/BossOptional/realtap",
+  "skills": "./skills"
+}

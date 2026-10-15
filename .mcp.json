@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "realtap": {
+      "command": "node",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/bin/realtap-mcp.js"]
+    }
+  }
+}
