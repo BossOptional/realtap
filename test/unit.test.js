@@ -167,7 +167,7 @@ class FakeChannel {
 }
 
 test("send delivers a command and collects result + screenshot", async () => {
-  const out = fs.mkdtempSync(path.join(os.tmpdir(), "watchqa-test-"));
+  const out = fs.mkdtempSync(path.join(os.tmpdir(), "realtap-test-"));
   const ch = new FakeChannel({ dropPushes: 1 });
   const res = await send(ch, { op: "tap", target: "a", screenshot: true }, { outDir: out, pollMs: 5 });
   assert.equal(res.ok, true);
@@ -207,7 +207,7 @@ test("mcp server exposes the device tools", async () => {
 
 test("simulator channel follows the runner's data container when it moves", async () => {
   const { SimulatorChannel } = await import("../src/channel.js");
-  const base = fs.mkdtempSync(path.join(os.tmpdir(), "watchqa-sim-"));
+  const base = fs.mkdtempSync(path.join(os.tmpdir(), "realtap-sim-"));
   const dirs = [path.join(base, "old"), path.join(base, "new")];
   for (const d of dirs) fs.mkdirSync(path.join(d, "Documents"), { recursive: true });
   fs.writeFileSync(path.join(dirs[0], "Documents", "ready.json"), '{"session":"old"}');

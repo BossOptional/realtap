@@ -62,7 +62,7 @@ export function parseSimctl(json) {
 }
 
 export async function listDevices() {
-  const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "watchqa-")), "devices.json");
+  const tmp = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "realtap-")), "devices.json");
   const dc = await run("xcrun", ["devicectl", "list", "devices", "--json-output", tmp, "-q"], { timeoutMs: 30_000 });
   let physical = [];
   if (dc.code === 0) {
@@ -94,7 +94,7 @@ export function pickDevice(devices, selector, { simulator = false, platform } = 
       devices.find((d) => d.id.toLowerCase() === s || d.udid.toLowerCase() === s) ??
       devices.find((d) => d.name.toLowerCase() === s) ??
       devices.find((d) => d.name.toLowerCase().includes(s));
-    if (!hit) throw new Error(`no device matches '${selector}'. Run 'watchqa devices'.`);
+    if (!hit) throw new Error(`no device matches '${selector}'. Run 'realtap devices'.`);
     return hit;
   }
   const want = normalizePlatform(platform) ?? "watchos";
@@ -106,7 +106,7 @@ export function pickDevice(devices, selector, { simulator = false, platform } = 
     throw new Error(
       simulator
         ? `no booted ${label} simulator. Boot one (xcrun simctl boot <udid>) or pass --device.`
-        : `no physical ${label} visible to Xcode. Run 'watchqa doctor${flag}'.`,
+        : `no physical ${label} visible to Xcode. Run 'realtap doctor${flag}'.`,
     );
   }
   return hit;

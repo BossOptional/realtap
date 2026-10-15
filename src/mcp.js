@@ -10,7 +10,7 @@ const pkg = JSON.parse(fs.readFileSync(new URL("../package.json", import.meta.ur
 
 const target = {
   platform: z.enum(["watch", "ios"]).optional().describe("Which kind of device when none is named: Apple Watch (default) or an iPhone/iPad."),
-  device: z.string().optional().describe("Device name, CoreDevice id or UDID (see device_list). Default: the connected physical device of `platform` (or WATCHQA_DEVICE)."),
+  device: z.string().optional().describe("Device name, CoreDevice id or UDID (see device_list). Default: the connected physical device of `platform` (or REALTAP_DEVICE)."),
   simulator: z.boolean().optional().describe("Use a booted simulator instead of a physical device."),
 };
 const selector = {
@@ -73,7 +73,7 @@ function tool(server, name, description, shape, toCmd) {
 }
 
 export function createServer() {
-  const server = new McpServer({ name: "watchqa", version: pkg.version });
+  const server = new McpServer({ name: "realtap", version: pkg.version });
 
   server.registerTool("device_list", { description: "List Apple Watches and iPhones/iPads (physical and simulators) visible to Xcode.", inputSchema: {} }, async () => {
     try {

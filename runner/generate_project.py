@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
-"""Regenerate WatchQA.xcodeproj (project.pbxproj + schemes).
+"""Regenerate RealTap.xcodeproj (project.pbxproj + schemes).
 
 Two platform families share the same Swift sources:
 
-  watchOS  WatchQAHost    / WatchQARunner      bundle $(WATCHQA_BUNDLE_PREFIX)[.runner]
-  iOS      WatchQAHostiOS / WatchQARunneriOS   bundle $(WATCHQA_BUNDLE_PREFIX).ios[.runner]
+  watchOS  RealTapHost    / RealTapRunner      bundle $(REALTAP_BUNDLE_PREFIX)[.runner]
+  iOS      RealTapHostiOS / RealTapRunneriOS   bundle $(REALTAP_BUNDLE_PREFIX).ios[.runner]
 
 Run after adding/removing a source file:  python3 runner/generate_project.py
-Signing team and bundle prefix are build settings passed by `watchqa` (DEVELOPMENT_TEAM,
-WATCHQA_BUNDLE_PREFIX), never stored in the project.
+Signing team and bundle prefix are build settings passed by `realtap` (DEVELOPMENT_TEAM,
+REALTAP_BUNDLE_PREFIX), never stored in the project.
 """
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PROJ = os.path.join(HERE, "WatchQA.xcodeproj")
+PROJ = os.path.join(HERE, "RealTap.xcodeproj")
 
 HOST_SOURCES = ["HostApp.swift"]
-RUNNER_SOURCES = ["WatchQARunner.swift", "Commands.swift", "Elements.swift", "Mailbox.swift"]
+RUNNER_SOURCES = ["RealTapRunner.swift", "Commands.swift", "Elements.swift", "Mailbox.swift"]
 
 _next = [0x100]
 
@@ -45,7 +45,7 @@ common = {
     "SWIFT_VERSION": "5.0",
     "CODE_SIGN_STYLE": "Automatic",
     "ALWAYS_SEARCH_USER_PATHS": "NO",
-    "WATCHQA_BUNDLE_PREFIX": "dev.watchqa.local",
+    "REALTAP_BUNDLE_PREFIX": "dev.realtap.local",
     "MARKETING_VERSION": "0.2.0",
     "CURRENT_PROJECT_VERSION": "1",
 }
@@ -71,7 +71,7 @@ def build_file(f):
 
 
 def family(suffix, platform_settings, host_bundle, runner_bundle, host_extra):
-    host_name, runner_name = "WatchQAHost" + suffix, "WatchQARunner" + suffix
+    host_name, runner_name = "RealTapHost" + suffix, "RealTapRunner" + suffix
     host_prod, runner_prod = oid(), oid()
     add(host_prod, "{isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = %s.app; sourceTree = BUILT_PRODUCTS_DIR;}" % host_name)
     add(runner_prod, "{isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = %s.xctest; sourceTree = BUILT_PRODUCTS_DIR;}" % runner_name)
@@ -87,7 +87,7 @@ def family(suffix, platform_settings, host_bundle, runner_bundle, host_extra):
         "PRODUCT_NAME": '"$(TARGET_NAME)"',
         "PRODUCT_BUNDLE_IDENTIFIER": host_bundle,
         "GENERATE_INFOPLIST_FILE": "YES",
-        "INFOPLIST_KEY_CFBundleDisplayName": "WatchQA",
+        "INFOPLIST_KEY_CFBundleDisplayName": "RealTap",
         "LD_RUNPATH_SEARCH_PATHS": '"$(inherited) @executable_path/Frameworks"',
         **host_extra,
     }
@@ -128,8 +128,8 @@ watch = family(
         "WATCHOS_DEPLOYMENT_TARGET": "10.0",
         "TARGETED_DEVICE_FAMILY": "4",
     },
-    '"$(WATCHQA_BUNDLE_PREFIX)"',
-    '"$(WATCHQA_BUNDLE_PREFIX).runner"',
+    '"$(REALTAP_BUNDLE_PREFIX)"',
+    '"$(REALTAP_BUNDLE_PREFIX).runner"',
     {"INFOPLIST_KEY_WKWatchOnly": "YES", "INFOPLIST_KEY_WKApplication": "YES"},
 )
 ios = family(
@@ -142,8 +142,8 @@ ios = family(
         "SUPPORTS_MACCATALYST": "NO",
         "SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD": "NO",
     },
-    '"$(WATCHQA_BUNDLE_PREFIX).ios"',
-    '"$(WATCHQA_BUNDLE_PREFIX).ios.runner"',
+    '"$(REALTAP_BUNDLE_PREFIX).ios"',
+    '"$(REALTAP_BUNDLE_PREFIX).ios.runner"',
     {"INFOPLIST_KEY_UILaunchScreen_Generation": "YES", "INFOPLIST_KEY_UIApplicationSceneManifest_Generation": "YES"},
 )
 
@@ -167,7 +167,7 @@ with open(os.path.join(PROJ, "project.pbxproj"), "w") as f:
 
 
 def ref(bid, name, bp):
-    return '<BuildableReference BuildableIdentifier = "primary" BlueprintIdentifier = "%s" BuildableName = "%s" BlueprintName = "%s" ReferencedContainer = "container:WatchQA.xcodeproj"/>' % (bid, name, bp)
+    return '<BuildableReference BuildableIdentifier = "primary" BlueprintIdentifier = "%s" BuildableName = "%s" BlueprintName = "%s" ReferencedContainer = "container:RealTap.xcodeproj"/>' % (bid, name, bp)
 
 
 def scheme(fam):

@@ -28,7 +28,7 @@ async function retry(fn, tries, delayMs = 400) {
 export async function send(channel, command, { timeoutMs = 60_000, outDir, pollMs = 250 } = {}) {
   const cmd = { ...command, id: command.id ?? newId() };
   const started = Date.now();
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "watchqa-cmd-"));
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "realtap-cmd-"));
   try {
     const local = path.join(tmp, `${cmd.id}.json`);
     fs.writeFileSync(local, JSON.stringify(cmd));
@@ -69,7 +69,7 @@ export async function send(channel, command, { timeoutMs = 60_000, outDir, pollM
 
 /** Read a small JSON file from the container (ready.json, heartbeat.json). */
 export async function readJson(channel, remotePath) {
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "watchqa-read-"));
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "realtap-read-"));
   try {
     const local = path.join(tmp, "f.json");
     if (!(await channel.pull(remotePath, local))) return null;

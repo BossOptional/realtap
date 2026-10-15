@@ -3,20 +3,20 @@
    <BuildAction parallelizeBuildables = "YES" buildImplicitDependencies = "YES">
       <BuildActionEntries>
          <BuildActionEntry buildForTesting = "YES" buildForRunning = "YES" buildForProfiling = "NO" buildForArchiving = "NO" buildForAnalyzing = "NO">
-            <BuildableReference BuildableIdentifier = "primary" BlueprintIdentifier = "WQ0000000000000000000125" BuildableName = "WatchQAHostiOS.app" BlueprintName = "WatchQAHostiOS" ReferencedContainer = "container:WatchQA.xcodeproj"/>
+            <BuildableReference BuildableIdentifier = "primary" BlueprintIdentifier = "WQ000000000000000000010F" BuildableName = "RealTapHost.app" BlueprintName = "RealTapHost" ReferencedContainer = "container:RealTap.xcodeproj"/>
          </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction buildConfiguration = "Debug" selectedDebuggerIdentifier = "" selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB" shouldUseLaunchSchemeArgsEnv = "NO">
       <Testables>
          <TestableReference skipped = "NO">
-            <BuildableReference BuildableIdentifier = "primary" BlueprintIdentifier = "WQ000000000000000000012C" BuildableName = "WatchQARunneriOS.xctest" BlueprintName = "WatchQARunneriOS" ReferencedContainer = "container:WatchQA.xcodeproj"/>
+            <BuildableReference BuildableIdentifier = "primary" BlueprintIdentifier = "WQ0000000000000000000116" BuildableName = "RealTapRunner.xctest" BlueprintName = "RealTapRunner" ReferencedContainer = "container:RealTap.xcodeproj"/>
          </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction buildConfiguration = "Debug" selectedDebuggerIdentifier = "" selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB" launchStyle = "0" debugDocumentVersioning = "YES" allowLocationSimulation = "YES">
       <BuildableProductRunnable runnableDebuggingMode = "0">
-         <BuildableReference BuildableIdentifier = "primary" BlueprintIdentifier = "WQ0000000000000000000125" BuildableName = "WatchQAHostiOS.app" BlueprintName = "WatchQAHostiOS" ReferencedContainer = "container:WatchQA.xcodeproj"/>
+         <BuildableReference BuildableIdentifier = "primary" BlueprintIdentifier = "WQ000000000000000000010F" BuildableName = "RealTapHost.app" BlueprintName = "RealTapHost" ReferencedContainer = "container:RealTap.xcodeproj"/>
       </BuildableProductRunnable>
    </LaunchAction>
 </Scheme>

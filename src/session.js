@@ -7,7 +7,7 @@ import { readJson, send } from "./client.js";
 import { PROJECT, RUNNER_SOURCES, derivedDataDir, runnerContainer, stateDir } from "./config.js";
 import { run, sleep } from "./exec.js";
 
-const scheme = (device) => (device.platform === "ios" ? "WatchQARunneriOS" : "WatchQARunner");
+const scheme = (device) => (device.platform === "ios" ? "RealTapRunneriOS" : "RealTapRunner");
 
 /** Hash of the runner sources so a changed runner triggers a rebuild. */
 export function runnerSourceHash(root = RUNNER_SOURCES) {
@@ -31,7 +31,7 @@ export function analyzeLog(text) {
   if (/Developer Mode (is )?(disabled|not enabled)/i.test(text)) hints.push("enable Developer Mode on the device: Settings > Privacy & Security > Developer Mode");
   if (/Timed out while enabling automation mode/i.test(text)) hints.push("iOS device refused UI automation: keep it unlocked with the screen on, and enable Settings > Developer > Enable UI Automation (confirm any prompt on the device)");
   if (/Developer mode is disabled for Apple development tools/i.test(text)) hints.push("one-time on this Mac: sudo DevToolsSecurity -enable (needs an admin password)");
-  if (/No profiles for|requires a development team|Signing for .* requires/i.test(text)) hints.push("signing failed: run 'watchqa setup --team <TEAMID>'");
+  if (/No profiles for|requires a development team|Signing for .* requires/i.test(text)) hints.push("signing failed: run 'realtap setup --team <TEAMID>'");
   if (/Unable to find a destination|is not available|Timed out waiting for .* to become available|connection to this device could not be established|Failed to establish communication with the test runner/i.test(text)) hints.push("Xcode cannot reach the device: keep it unlocked (USB, or same Wi-Fi as this Mac); disable VPN/TUN proxies");
   const finished = /\*\* TEST (EXECUTE )?(SUCCEEDED|FAILED) \*\*/.exec(text)?.[2] ?? null;
   const errors = [...text.matchAll(/^.*error: .*$/gm)].map((m) => m[0].trim()).slice(-5);
@@ -39,7 +39,7 @@ export function analyzeLog(text) {
 }
 
 function settings(device, cfg) {
-  const s = [`WATCHQA_BUNDLE_PREFIX=${cfg.bundlePrefix}`];
+  const s = [`REALTAP_BUNDLE_PREFIX=${cfg.bundlePrefix}`];
   if (device.kind === "device") s.push(`DEVELOPMENT_TEAM=${cfg.team}`);
   return s;
 }
@@ -48,7 +48,7 @@ function baseArgs(device) {
   return ["-project", PROJECT, "-scheme", scheme(device), "-destination", `id=${device.udid}`, "-derivedDataPath", derivedDataDir(device)];
 }
 
-const stampFile = (device) => path.join(derivedDataDir(device), "watchqa-stamp.json");
+const stampFile = (device) => path.join(derivedDataDir(device), "realtap-stamp.json");
 const wantedStamp = (device, cfg) => ({ hash: runnerSourceHash(), bundlePrefix: cfg.bundlePrefix, team: device.kind === "device" ? cfg.team : null });
 
 export function isBuilt(device, cfg) {
@@ -61,7 +61,7 @@ export function isBuilt(device, cfg) {
 
 export async function build(device, cfg, { onProgress = () => {} } = {}) {
   if (device.kind === "device" && !cfg.team) {
-    throw new Error("a development team is required for a physical device: watchqa setup --team <TEAMID>");
+    throw new Error("a development team is required for a physical device: realtap setup --team <TEAMID>");
   }
   onProgress(`building runner for ${device.name} (${device.kind})…`);
   const args = ["build-for-testing", ...baseArgs(device), ...settings(device, cfg)];
@@ -149,7 +149,7 @@ export async function start(device, cfg, { ttlS = 3600, waitS = 300, rebuild = f
   const child = spawn("xcodebuild", args, {
     detached: true,
     stdio: ["ignore", logFd, logFd],
-    env: { ...process.env, TEST_RUNNER_WATCHQA_SESSION: id, TEST_RUNNER_WATCHQA_TTL: String(ttlS) },
+    env: { ...process.env, TEST_RUNNER_REALTAP_SESSION: id, TEST_RUNNER_REALTAP_TTL: String(ttlS) },
   });
   child.unref();
   fs.closeSync(logFd);
@@ -209,7 +209,7 @@ export async function selftest(device, cfg, { onProgress = () => {} } = {}) {
 export async function command(device, cfg, cmd, opts = {}) {
   const session = readSession(device);
   if (!(alive(session?.pid) && session.ready)) {
-    if (opts.autostart === false) return { ok: false, error: "runner not running: watchqa start" };
+    if (opts.autostart === false) return { ok: false, error: "runner not running: realtap start" };
     await start(device, cfg, { onProgress: opts.onProgress });
   }
   return send(channel(device, cfg), cmd, opts);

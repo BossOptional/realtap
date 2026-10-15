@@ -1,9 +1,9 @@
 import SwiftUI
 
 /// Minimal host app. XCUITest needs a target application to install the runner
-/// next to; it also doubles as a fixture for `watchqa selftest` and the e2e suite.
+/// next to; it also doubles as a fixture for `realtap selftest` and the e2e suite.
 @main
-struct WatchQAHostApp: App {
+struct RealTapHostApp: App {
     var body: some Scene {
         WindowGroup { FixtureView() }
     }

@@ -16,7 +16,7 @@ import * as session from "../src/session.js";
 const { opt } = parseArgs(process.argv.slice(2));
 const cfg = loadConfig();
 const device = await resolveDevice({ device: opt.device, platform: opt.platform, simulator: opt.simulator }, cfg);
-const outDir = opt.out ?? path.resolve("watchqa-out", "e2e", `${device.platform}-${device.kind}`);
+const outDir = opt.out ?? path.resolve("realtap-out", "e2e", `${device.platform}-${device.kind}`);
 fs.rmSync(outDir, { recursive: true, force: true });
 const log = (...a) => console.log("[e2e]", ...a);
 const ios = device.platform === "ios";

@@ -43,7 +43,7 @@ Points: `x`/`y` in points from the app's top-left, or `nx`/`ny` normalized 0…1
 | op | fields | notes |
 |----|--------|-------|
 | `ping` | | |
-| `launch` | `bundleId?`, `args?`, `env?` | (Re)launches. No `bundleId` → host fixture app. Launching a bundle that is not installed can stall the runner; `watchqa stop` recovers. |
+| `launch` | `bundleId?`, `args?`, `env?` | (Re)launches. No `bundleId` → host fixture app. Launching a bundle that is not installed can stall the runner; `realtap stop` recovers. |
 | `activate` | `bundleId?` | Foreground without relaunch. |
 | `terminate` | | |
 | `state` | | Result `state`: `foreground` / `background` / `backgroundSuspended` / `notRunning`. |

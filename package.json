@@ -1,13 +1,11 @@
 {
-  "name": "apple-device-qa",
+  "name": "realtap",
   "version": "0.1.0",
   "description": "Drive Apple Watch and iPhone/iPad (physical or simulator) from the command line or an AI agent: tap, swipe, type, Digital Crown, screenshots and accessibility tree via an XCUITest runner.",
   "type": "module",
   "bin": {
-    "apple-device-qa": "bin/watchqa.js",
-    "apple-device-qa-mcp": "bin/watchqa-mcp.js",
-    "watchqa": "bin/watchqa.js",
-    "watchqa-mcp": "bin/watchqa-mcp.js"
+    "realtap": "bin/realtap.js",
+    "realtap-mcp": "bin/realtap-mcp.js"
   },
   "files": [
     "bin",
@@ -41,11 +39,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BossOptional/apple-device-qa.git"
+    "url": "git+https://github.com/BossOptional/realtap.git"
   },
-  "homepage": "https://github.com/BossOptional/apple-device-qa#readme",
+  "homepage": "https://github.com/BossOptional/realtap#readme",
   "bugs": {
-    "url": "https://github.com/BossOptional/apple-device-qa/issues"
+    "url": "https://github.com/BossOptional/realtap/issues"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.1",

@@ -4,31 +4,31 @@ import { PLATFORMS, listDevices, normalizePlatform, selectDevice } from "./devic
 import { run } from "./exec.js";
 import * as session from "./session.js";
 
-const USAGE = `watchqa — drive an Apple Watch or iPhone/iPad (physical or simulator) via an XCUITest runner
+const USAGE = `realtap — drive an Apple Watch or iPhone/iPad (physical or simulator) via an XCUITest runner
 
 Setup
-  watchqa devices                       list watches and iPhones/iPads visible to Xcode
-  watchqa doctor                        check prerequisites and explain what is missing
-  watchqa setup --team TEAMID [--bundle-prefix com.example.watchqa] [--device NAME|ID] [--platform watch|ios]
-  watchqa build | start [--ttl 3600] [--rebuild] | stop | status | selftest
+  realtap devices                       list watches and iPhones/iPads visible to Xcode
+  realtap doctor                        check prerequisites and explain what is missing
+  realtap setup --team TEAMID [--bundle-prefix com.example.realtap] [--device NAME|ID] [--platform watch|ios]
+  realtap build | start [--ttl 3600] [--rebuild] | stop | status | selftest
 
 Commands (auto-start the runner)
-  watchqa launch [BUNDLE_ID] [--arg A]... [--env K=V]...
-  watchqa activate [BUNDLE_ID] | terminate | state | home
-  watchqa tap        SELECTOR | --x X --y Y | --nx 0.5 --ny 0.5
-  watchqa double-tap SELECTOR | point
-  watchqa long-press SELECTOR | point [--duration 1]
-  watchqa swipe up|down|left|right [SELECTOR]
-  watchqa wait SECONDS
-  watchqa wait-for SELECTOR [--timeout 10] [--gone]
-  watchqa find SELECTOR
-  watchqa screenshot | elements | tree
-  watchqa send '{"op":"tap","target":"id"}'
-  watchOS only:  watchqa crown DELTA            rotate the Digital Crown (positive scrolls down)
-  iOS only:      watchqa type TEXT [SELECTOR]   type (taps the field first when a selector is given)
-                 watchqa button home|volumeUp|volumeDown
-                 watchqa pinch [SELECTOR] [--scale 2] [--velocity 1]
-                 watchqa orientation portrait|portraitUpsideDown|landscapeLeft|landscapeRight
+  realtap launch [BUNDLE_ID] [--arg A]... [--env K=V]...
+  realtap activate [BUNDLE_ID] | terminate | state | home
+  realtap tap        SELECTOR | --x X --y Y | --nx 0.5 --ny 0.5
+  realtap double-tap SELECTOR | point
+  realtap long-press SELECTOR | point [--duration 1]
+  realtap swipe up|down|left|right [SELECTOR]
+  realtap wait SECONDS
+  realtap wait-for SELECTOR [--timeout 10] [--gone]
+  realtap find SELECTOR
+  realtap screenshot | elements | tree
+  realtap send '{"op":"tap","target":"id"}'
+  watchOS only:  realtap crown DELTA            rotate the Digital Crown (positive scrolls down)
+  iOS only:      realtap type TEXT [SELECTOR]   type (taps the field first when a selector is given)
+                 realtap button home|volumeUp|volumeDown
+                 realtap pinch [SELECTOR] [--scale 2] [--velocity 1]
+                 realtap orientation portrait|portraitUpsideDown|landscapeLeft|landscapeRight
 
   SELECTOR: --target ACCESSIBILITY_ID | --label TEXT | --predicate 'label BEGINSWITH "Hi"'
             [--type button] [--index N] [--timeout S]
@@ -41,7 +41,7 @@ Options
   --elements           attach a compact element list
   --tree               attach the raw accessibility tree (saved under --out)
   --settle S           extra wait after the action
-  --out DIR            where screenshots/trees go (default ./watchqa-out)
+  --out DIR            where screenshots/trees go (default ./realtap-out)
 `;
 
 const BOOL = new Set(["simulator", "screenshot", "elements", "tree", "gone", "rebuild", "json", "help"]);
@@ -159,7 +159,7 @@ export function toCommand(verb, pos, opt) {
 }
 
 const print = (obj) => console.log(JSON.stringify(obj, null, 2));
-const progress = (msg) => console.error(`watchqa: ${msg}`);
+const progress = (msg) => console.error(`realtap: ${msg}`);
 
 async function doctor(cfg, opt) {
   const checks = [];
@@ -189,9 +189,9 @@ async function doctor(cfg, opt) {
       add(device.connected, `CoreDevice tunnel: ${device.connected ? "connected" : "idle (connects on demand)"}`,
         "if commands fail to deliver: unlock the device, keep it connected (a watch: near its iPhone, same Wi-Fi as the Mac)", { warn: true });
       add(device.developerMode === "enabled", `Developer Mode: ${device.developerMode ?? "unknown"}`, "device Settings > Privacy & Security > Developer Mode");
-      add(Boolean(cfg.team), `signing team: ${cfg.team ?? "not set"}`, "watchqa setup --team <TEAMID>");
+      add(Boolean(cfg.team), `signing team: ${cfg.team ?? "not set"}`, "realtap setup --team <TEAMID>");
     }
-    add(session.isBuilt(device, cfg), "runner built for current sources", "watchqa build");
+    add(session.isBuilt(device, cfg), "runner built for current sources", "realtap build");
   }
   const tun = Object.values(os.networkInterfaces()).flat().some((i) => i?.address?.startsWith("198.18."));
   if (tun) add(false, "a TUN/proxy interface (198.18.x.x) is active", "if the device is not discovered, disable the proxy's TUN/enhanced mode", { warn: true });

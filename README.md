@@ -1,4 +1,4 @@
-# apple-device-qa
+# realtap
 
 Drive an **Apple Watch or an iPhone/iPad — physical or simulator** from the command
 line or an AI agent: tap, long-press, swipe, type, Digital Crown, launch apps by bundle
@@ -7,7 +7,7 @@ two platforms.
 
 There is no off-the-shelf way to automate a *physical* Apple Watch: Appium's XCUITest
 driver and most MCP servers are simulator-only for watchOS, and iPhone "Apple Watch
-Mirroring" yields screenshots but not input. `apple-device-qa` installs a small XCUITest
+Mirroring" yields screenshots but not input. `realtap` installs a small XCUITest
 runner on the device and talks to it through files moved over the CoreDevice tunnel
 (on a watch the runner process cannot use the network at all), so it works on real
 hardware — and the same mechanism drives iPhones, so you do not need a second stack
@@ -15,7 +15,7 @@ hardware — and the same mechanism drives iPhones, so you do not need a second 
 
 ```
 Mac                                         Apple Watch / iPhone / simulator
-watchqa CLI / MCP ── devicectl copy ──▶ Documents/inbox/<id>.json
+realtap CLI / MCP ── devicectl copy ──▶ Documents/inbox/<id>.json
                                          RunnerTests.testServe (XCUITest)
                   ◀─ devicectl copy ── Documents/outbox/<id>.{json,png,txt}
 ```
@@ -40,34 +40,34 @@ watchqa CLI / MCP ── devicectl copy ──▶ Documents/inbox/<id>.json
 ## Install
 
 ```bash
-npm install -g apple-device-qa        # or: npx apple-device-qa …
-# installs two commands: `apple-device-qa` and the short alias `watchqa` (used below)
+npm install -g realtap        # or: npx realtap …
+# installs two commands: `realtap` (CLI) and `realtap-mcp` (MCP server)
 ```
 
-From a checkout: `git clone https://github.com/BossOptional/apple-device-qa && cd apple-device-qa && npm install && npm link`.
+From a checkout: `git clone https://github.com/BossOptional/realtap && cd realtap && npm install && npm link`.
 
 ## Quick start
 
 ```bash
-watchqa doctor                        # what is missing and how to fix it (add --platform ios)
-watchqa setup --team ABCDE12345       # signing team (physical devices only)
-watchqa start                         # build + install + launch runner (first time: minutes)
-watchqa launch com.example.watchapp --elements -s
-watchqa tap --target settings.button -s
-watchqa crown 1.5
-watchqa stop
+realtap doctor                        # what is missing and how to fix it (add --platform ios)
+realtap setup --team ABCDE12345       # signing team (physical devices only)
+realtap start                         # build + install + launch runner (first time: minutes)
+realtap launch com.example.watchapp --elements -s
+realtap tap --target settings.button -s
+realtap crown 1.5
+realtap stop
 
 # iPhone / iPad: same commands, add --platform ios
-watchqa launch com.example.app --platform ios --elements -s
-watchqa type "hello" --target search.field --platform ios
+realtap launch com.example.app --platform ios --elements -s
+realtap type "hello" --target search.field --platform ios
 ```
 
-Platform selection: `--platform watch|ios` (default `watch`; `watchqa setup --platform ios`
+Platform selection: `--platform watch|ios` (default `watch`; `realtap setup --platform ios`
 changes the default). Naming a device with `--device NAME|ID` picks its platform
 automatically. Simulators: add `--simulator` (a booted one of that platform).
-Screenshots and trees go to `./watchqa-out` (`--out` to change).
+Screenshots and trees go to `./realtap-out` (`--out` to change).
 
-Full command list: `watchqa --help`. Wire format: [PROTOCOL.md](PROTOCOL.md).
+Full command list: `realtap --help`. Wire format: [PROTOCOL.md](PROTOCOL.md).
 
 | Gesture | watchOS | iOS |
 |---------|:-------:|:---:|
@@ -79,10 +79,10 @@ Full command list: `watchqa --help`. Wire format: [PROTOCOL.md](PROTOCOL.md).
 ## MCP server
 
 ```json
-{ "mcpServers": { "apple-device-qa": { "command": "npx", "args": ["-y", "--package=apple-device-qa", "apple-device-qa-mcp"] } } }
+{ "mcpServers": { "realtap": { "command": "npx", "args": ["-y", "--package=realtap", "realtap-mcp"] } } }
 ```
 
-Claude Code: `claude mcp add apple-device-qa -- npx -y --package=apple-device-qa apple-device-qa-mcp`.
+Claude Code: `claude mcp add realtap -- npx -y --package=realtap realtap-mcp`.
 
 Tools: `device_list`, `device_start`, `device_status`, `device_stop`,
 `device_launch`, `device_activate`, `device_terminate`, `device_tap` (tap / doubleTap /
@@ -93,20 +93,20 @@ longPress), `device_swipe`, `device_home`, `device_wait_for`, `device_find`,
 `simulator` to choose the target. Action tools accept `screenshot` / `elements` to
 return the post-action state in the same call.
 
-An agent skill describing the workflow lives in [`skills/watchqa/SKILL.md`](skills/watchqa/SKILL.md).
+An agent skill describing the workflow lives in [`skills/realtap/SKILL.md`](skills/realtap/SKILL.md).
 
 ## Configuration
 
 | Setting | CLI | Env | Default |
 |---------|-----|-----|---------|
-| Signing team | `setup --team` | `WATCHQA_TEAM` | — (required for physical devices) |
-| Bundle prefix | `setup --bundle-prefix` | `WATCHQA_BUNDLE_PREFIX` | `dev.watchqa.<team>` |
-| Default platform | `setup --platform`, `--platform` | `WATCHQA_PLATFORM` | `watch` |
-| Default device | `setup --device`, `--device` | `WATCHQA_DEVICE` | connected physical device of the platform |
-| Output dir | `--out` | `WATCHQA_OUT` | `./watchqa-out` |
+| Signing team | `setup --team` | `REALTAP_TEAM` | — (required for physical devices) |
+| Bundle prefix | `setup --bundle-prefix` | `REALTAP_BUNDLE_PREFIX` | `dev.realtap.<team>` |
+| Default platform | `setup --platform`, `--platform` | `REALTAP_PLATFORM` | `watch` |
+| Default device | `setup --device`, `--device` | `REALTAP_DEVICE` | connected physical device of the platform |
+| Output dir | `--out` | `REALTAP_OUT` | `./realtap-out` |
 
-Config lives in `~/.config/watchqa/config.json`; builds, logs and session state in
-`~/.cache/watchqa/`. The runner is rebuilt automatically when its sources, the
+Config lives in `~/.config/realtap/config.json`; builds, logs and session state in
+`~/.cache/realtap/`. The runner is rebuilt automatically when its sources, the
 bundle prefix or the team change.
 
 Bundle ids registered under your team (automatic signing creates them on first build):
@@ -117,14 +117,14 @@ for iOS. The runner project is generated by `runner/generate_project.py`.
 
 | Symptom | Fix |
 |---------|-----|
-| Watch missing from `watchqa devices` | Same Wi-Fi as the Mac, unlocked, near its iPhone; open Xcode › Devices and Simulators; disable VPN/TUN proxies (Clash/Surge enhanced mode); enable Developer Mode on the watch. |
+| Watch missing from `realtap devices` | Same Wi-Fi as the Mac, unlocked, near its iPhone; open Xcode › Devices and Simulators; disable VPN/TUN proxies (Clash/Surge enhanced mode); enable Developer Mode on the watch. |
 | iPhone missing / "not connected" | Connect by USB or Wi-Fi, unlock, trust this Mac, enable Developer Mode; open Xcode › Devices and Simulators. |
 | `Developer mode is disabled for Apple development tools` | One-time on the Mac: `sudo DevToolsSecurity -enable` (needs an admin password). |
 | `start` waits with "device is locked" | Unlock the device (a watch: wear it); the run continues. |
-| "connection to this device could not be established" | Wake and unlock the device, then `watchqa start` again. |
+| "connection to this device could not be established" | Wake and unlock the device, then `realtap start` again. |
 | Taps do nothing, screenshot shows passcode | Locked mid-session. Wear/unlock it; consider a longer auto-lock. |
 | iOS swipe types letters instead of scrolling | The keyboard is open; the swipe landed on the keys. Scroll first, or dismiss the keyboard. |
-| A command never returns after `launch` of an unknown bundle | `watchqa stop && watchqa start`. |
+| A command never returns after `launch` of an unknown bundle | `realtap stop && realtap start`. |
 | Simulator runs get killed | Another process (e.g. CI) uses the same simulator; pick another with `--device`. |
 
 ## Performance
@@ -141,6 +141,6 @@ npm run e2e:sim          # end-to-end against a booted watchOS simulator
 npm run e2e:device       # end-to-end against the physical watch (wear it)
 npm run e2e:ios-sim      # end-to-end against a booted iOS simulator
 npm run e2e:ios-device   # end-to-end against a physical iPhone/iPad
-watchqa selftest         # gesture self-check inside XCTest (add --platform ios)
+realtap selftest         # gesture self-check inside XCTest (add --platform ios)
 python3 runner/generate_project.py   # regenerate the Xcode project after adding runner files
 ```

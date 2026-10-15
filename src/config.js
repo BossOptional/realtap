@@ -5,11 +5,11 @@ import { fileURLToPath } from "node:url";
 import { normalizePlatform } from "./devices.js";
 
 export const PACKAGE_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-export const PROJECT = path.join(PACKAGE_ROOT, "runner", "WatchQA.xcodeproj");
+export const PROJECT = path.join(PACKAGE_ROOT, "runner", "RealTap.xcodeproj");
 export const RUNNER_SOURCES = path.join(PACKAGE_ROOT, "runner");
 
-const CONFIG_DIR = process.env.WATCHQA_CONFIG_DIR ?? path.join(os.homedir(), ".config", "watchqa");
-const CACHE_DIR = process.env.WATCHQA_CACHE_DIR ?? path.join(os.homedir(), ".cache", "watchqa");
+const CONFIG_DIR = process.env.REALTAP_CONFIG_DIR ?? path.join(os.homedir(), ".config", "realtap");
+const CACHE_DIR = process.env.REALTAP_CACHE_DIR ?? path.join(os.homedir(), ".cache", "realtap");
 const CONFIG_FILE = path.join(CONFIG_DIR, "config.json");
 
 /**
@@ -25,12 +25,12 @@ export function loadConfig() {
     file = JSON.parse(fs.readFileSync(CONFIG_FILE, "utf8"));
   } catch {}
   const cfg = {
-    team: process.env.WATCHQA_TEAM ?? file.team,
-    bundlePrefix: process.env.WATCHQA_BUNDLE_PREFIX ?? file.bundlePrefix,
-    device: process.env.WATCHQA_DEVICE ?? file.device,
-    platform: normalizePlatform(process.env.WATCHQA_PLATFORM ?? file.platform),
+    team: process.env.REALTAP_TEAM ?? file.team,
+    bundlePrefix: process.env.REALTAP_BUNDLE_PREFIX ?? file.bundlePrefix,
+    device: process.env.REALTAP_DEVICE ?? file.device,
+    platform: normalizePlatform(process.env.REALTAP_PLATFORM ?? file.platform),
   };
-  if (!cfg.bundlePrefix) cfg.bundlePrefix = cfg.team ? `dev.watchqa.${cfg.team.toLowerCase()}` : "dev.watchqa.local";
+  if (!cfg.bundlePrefix) cfg.bundlePrefix = cfg.team ? `dev.realtap.${cfg.team.toLowerCase()}` : "dev.realtap.local";
   return cfg;
 }
 
@@ -66,5 +66,5 @@ export function derivedDataDir(device) {
 }
 
 export function defaultOutDir() {
-  return process.env.WATCHQA_OUT ?? path.join(process.cwd(), "watchqa-out");
+  return process.env.REALTAP_OUT ?? path.join(process.cwd(), "realtap-out");
 }

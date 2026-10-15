@@ -2,7 +2,7 @@ import XCTest
 
 /// Long-running UI test that turns the watch into a remotely drivable device.
 ///
-/// The Mac side (`watchqa`) drops command files into this runner's data container
+/// The Mac side (`realtap`) drops command files into this runner's data container
 /// (`Documents/inbox/<id>.json`) and collects results from `Documents/outbox/`.
 /// On a physical watch the files move over the CoreDevice tunnel with
 /// `devicectl device copy`; on a simulator they are read directly from disk.
@@ -31,7 +31,7 @@ final class RunnerTests: XCTestCase {
     }
 
     func testServe() throws {
-        let ttl = TimeInterval(env["WATCHQA_TTL"] ?? "") ?? 3600
+        let ttl = TimeInterval(env["REALTAP_TTL"] ?? "") ?? 3600
         let deadline = Date().addingTimeInterval(ttl)
         let mailbox = try Mailbox()
         let commands = Commands()
@@ -44,7 +44,7 @@ final class RunnerTests: XCTestCase {
         let screen = XCUIScreen.main.screenshot().image
         try mailbox.writeReady([
             "platform": platform,
-            "session": env["WATCHQA_SESSION"] ?? "",
+            "session": env["REALTAP_SESSION"] ?? "",
             "runner_version": Self.runnerVersion,
             "started_at": ISO8601DateFormatter().string(from: Date()),
             "screen": [
@@ -54,7 +54,7 @@ final class RunnerTests: XCTestCase {
             ],
             "ttl_s": ttl,
         ])
-        NSLog("[watchqa] serving from \(mailbox.root.path) for \(Int(ttl))s")
+        NSLog("[realtap] serving from \(mailbox.root.path) for \(Int(ttl))s")
 
         while Date() < deadline {
             mailbox.heartbeat()
@@ -96,7 +96,7 @@ final class RunnerTests: XCTestCase {
     }
 
     /// Self-check of the gestures against the bundled fixture app. Run with
-    /// `watchqa selftest`.
+    /// `realtap selftest`.
     func testSelftest() throws {
         let app = XCUIApplication()
         app.launch()
